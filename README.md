@@ -1,28 +1,22 @@
-== README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+rails generate model Case case_number:string case_number_integer:integer title:string case_type:string case_status:string status_date:date file_date:date property_address:string plaintiff_name_original:string plaintiff_name_guess:string plaintiff_attorney_name:string defendants_json:string defendants_self_represented:boolean docket_information:string case_outcome:string case_outcome_date:date 
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+
+case_number
+case_number_integer
+title
+case_type
+case_status
+status_date
+file_date
+property_address
+plaintiff_name_original
+plaintiff_name_guess
+plaintiff_attorney_name
+defendants_json
+defendants_self_represented
+docket_information
+case_outcome
+case_outcome_date
+
+
