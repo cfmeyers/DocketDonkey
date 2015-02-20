@@ -6,8 +6,8 @@ require 'json'
 
 plaintiff_name_fingerprint = Hash.new()
 
-rows = CSV.read('data/mc2014_complete.csv')
-
+# rows = CSV.read('data/mc2014_complete.csv')
+rows = CSV.read('data/mc2015_02_15.csv')
 def case_number_integer(case_number)
   case_number.split('SP')[1].to_i
 end
