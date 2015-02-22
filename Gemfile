@@ -12,6 +12,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'pry-rails'
 
+gem 'capistrano'
+gem 'capistrano-bundler'
+gem 'capistrano-rails'
+gem 'capistrano-rbenv', github: "capistrano/rbenv" # Add this if you're using rbenv
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
