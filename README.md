@@ -1,22 +1,18 @@
-rails generate model Case case_number:string case_number_integer:integer title:string case_type:string case_status:string status_date:date file_date:date property_address:string plaintiff_name_original:string plaintiff_name_guess:string plaintiff_attorney_name:string defendants_json:string defendants_self_represented:boolean docket_information:string case_outcome:string case_outcome_date:date 
 
 
 
-case_number
-case_number_integer
-title
-case_type
-case_status
-status_date
-file_date
-property_address
-plaintiff_name_original
-plaintiff_name_guess
-plaintiff_attorney_name
-defendants_json
-defendants_self_represented
-docket_information
-case_outcome
-case_outcome_date
+
+##Todo
+
+[ ] Make capistrano task for seeding database with more case files
+
+[ ] Move csv parsing code from seeds.rb to library 
+
+[ ] Write tests for csv parsing code
+
+[ ] Write description for readme
+
+
+
 
 
