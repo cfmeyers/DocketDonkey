@@ -92,5 +92,3 @@ rows.each_with_index do |row, i|
   Case.create(row_hash)
 end
 
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
