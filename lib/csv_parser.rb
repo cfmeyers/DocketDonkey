@@ -28,39 +28,71 @@ class HousingCSVParser
   end
 
   def title
-    @row[1] ? @row[1].strip : nil
+    unless (@row[1].nil? || @row[1].empty?) 
+      @row[1].strip
+    else
+      nil
+    end
   end
 
   def case_type
-    @row[2] ? @row[2].strip : nil
+    unless (@row[2].nil? || @row[2].empty?) 
+      @row[2].strip
+    else
+      nil
+    end
   end
 
   def case_status
-    @row[3] ? @row[3].strip : nil
+    unless (@row[3].nil? || @row[3].empty?) 
+      @row[3].strip
+    else
+      nil
+    end
   end
 
   def status_date
-    @row[3] ? Date.strptime(@row[4], '%m/%d/%Y') : nil
+    unless (@row[4].nil? || @row[4].empty?) 
+      Date.strptime(@row[4], '%m/%d/%Y')
+    else
+      nil
+    end
   end
 
   def file_date
-    @row[5] ? Date.strptime(@row[5], '%m/%d/%Y') : nil
+    unless (@row[5].nil? || @row[5].empty?) 
+      Date.strptime(@row[5], '%m/%d/%Y')
+    else
+      nil
+    end
   end
 
   def property_address
-    @row[6] ? @row[6].gsub("\n", " ") : nil
+    unless (@row[6].nil? || @row[6].empty?)
+      @row[6].gsub("\n", " ") 
+    else
+      nil
+    end
   end
 
   def plaintiff_name_original
-    @row[7] ? @row[7].strip : nil
+    unless (@row[7].nil? || @row[7].empty?) 
+      @row[7].strip
+    else
+      nil
+    end
   end
 
   def plaintiff_attorney_name
-    @row[8] ? @row[8].strip : nil
+    unless (@row[8].nil? || @row[8].empty?) 
+      @row[8].strip
+    else
+      nil
+    end
   end
 
   def defendants_json
-    unless @row[9].nil?
+    unless (@row[9].nil? || @row[9].empty?)
       JSON.parse(@row[9].strip.gsub('|', ',')).map do |item|
         {name: item[0], attorney: item[1]['attorney']}
       end
@@ -70,7 +102,7 @@ class HousingCSVParser
   end
 
   def defendants_self_represented
-    unless @row[9].nil?
+    unless @row[9].nil? || @row[9].empty?
       self.defendants_json.each do |defendant|
         return false unless defendant[:attorney] == "Pro Se (PROPER)"
       end
@@ -81,15 +113,27 @@ class HousingCSVParser
   end
 
   def docket_information
-    @row[10] ? @row[10].strip : nil
+    unless (@row[10].nil? || @row[10].empty?) 
+      @row[10].strip
+    else
+      nil
+    end
   end
 
   def case_outcome
-    @row[11] ? @row[11].strip : nil
+    unless (@row[11].nil? || @row[11].empty?) 
+      @row[11].strip
+    else
+      nil
+    end
   end
 
   def case_outcome_date
-    @row[12] ? Date.strptime(@row[12], '%m/%d/%Y') : nil
+    unless (@row[12].nil? || @row[12].empty?) 
+      Date.strptime(@row[12], '%m/%d/%Y') 
+    else
+      nil
+    end
   end
 
   def self.truncate_name(name)
