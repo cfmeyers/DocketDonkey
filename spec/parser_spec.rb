@@ -53,14 +53,14 @@ describe HousingCSVParser do
 
   describe "a csv row missing information" do
     subject { HousingCSVParser.new(["15H85SP000001"]) }
-    it "raises an undefined value error whenever a field is undefined" do
+    it "returns nil whenever a  field is undefined" do
       methods = [:title, :case_type, :case_status, :status_date, :file_date,
                  :property_address, :plaintiff_name_original, :plaintiff_attorney_name, 
                  :defendants_json, :defendants_self_represented, :docket_information,
                  :case_outcome, :case_outcome_date]
 
       methods.each do |method_name|
-        expect{subject.send(method_name)}.to raise_error(CSVValueDoesNotExistError)
+        expect(subject.send(method_name)).to be_nil
       end
     end
   end
