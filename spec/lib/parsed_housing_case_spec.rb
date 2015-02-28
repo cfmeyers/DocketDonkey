@@ -1,39 +1,47 @@
-require 'csv_parser'
+require 'parsed_housing_case'
 require 'date'
 
-$ROW_1 = ["15H85SP000001",
-         "15H85SP000001 Jones, Alan Van vs. Smith, Bob et al",
-         "Housing Court Summary Process",
-         "Active",
-         "01/02/2015",
-         "01/02/2015",
-         "123 Main Street 5L\nWorcester MA 01610",
-         "Jones, Alan Van",
-         "Pro Se (PROPER)",
-         "{\"Smith| Lori\": {\"attorney\": \"Pro Se (PROPER)\"| \"role\": \"Defendant\"}| \"Smith| Bob\": {\"attorney\": \"Pro Se (PROPER)\"| \"role\": \"Defendant\"}}",
-         "Docket Information\nDocket File Ref Nbr.\n01/02/2015 Summary Process: MGL Chapter 185C Section 19;...",
-         "Agreement for Judgment",
-         "01/15/2015"]
+describe ParsedHousingCase do
 
-describe HousingCSVParser do
+  let(:row1) do 
+    ["15H85SP000001",
+     "15H85SP000001 Jones, Alan Van vs. Smith, Bob et al",
+     "Housing Court Summary Process",
+     "Active",
+     "01/02/2015",
+     "01/02/2015",
+     "123 Main Street 5L\nWorcester MA 01610",
+     "Jones, Alan Van",
+     "Pro Se (PROPER)",
+     "{\"Smith| Lori\": {\"attorney\": \"Pro Se (PROPER)\"| \"role\": \"Defendant\"}| \"Smith| Bob\": {\"attorney\": \"Pro Se (PROPER)\"| \"role\": \"Defendant\"}}",
+     "Docket Information\nDocket File Ref Nbr.\n01/02/2015 Summary Process: MGL Chapter 185C Section 19;...",
+     "Agreement for Judgment",
+     "01/15/2015"]
+  end
 
+  let(:methods) do
+    [:title, :case_type, :case_status, :status_date, :file_date,
+     :property_address, :plaintiff_name_original, :plaintiff_attorney_name, 
+     :defendants_json, :defendants_self_represented, :docket_information,
+     :case_outcome, :case_outcome_date]
+  end
   it "needs to be initialized with a row" do
-    expect{HousingCSVParser.new}.to raise_error(ArgumentError)
+    expect{ParsedHousingCase.new}.to raise_error(ArgumentError)
   end
 
   it "will raise an error if given a header row" do
-    expect{ HousingCSVParser.new(["case_number", "Title", "CaseType", "CaseStatus", "StatusDate", 
+    expect{ ParsedHousingCase.new(["case_number", "Title", "CaseType", "CaseStatus", "StatusDate", 
                "FileDate", "PropertyAddress", "PlaintiffName", "PlaintiffAttorneyName", 
                "Defendents", "DocketInformation", "CaseOutcome", "CaseOutcomeDate"]) }.to raise_error(CSVHeaderError)
   end
 
   it "will raise an error if given a row without a case_number field" do
-    expect{HousingCSVParser.new((["", "", "", "", "", "", "", "", "", "", "", "", ""]))}.to raise_error(CSVNoCaseNumberError)
-    expect{HousingCSVParser.new(([nil, "", "", "", "", "", "", "", "", "", "", "", ""]))}.to raise_error(CSVNoCaseNumberError)
+    expect{ParsedHousingCase.new(["", "", "", "", "", "", "", "", "", "", "", "", ""])}.to raise_error(CSVNoCaseNumberError)
+    expect{ParsedHousingCase.new([nil, "", "", "", "", "", "", "", "", "", "", "", ""])}.to raise_error(CSVNoCaseNumberError)
   end
 
   describe "a well-formed csv row" do
-    subject { HousingCSVParser.new($ROW_1) }
+    subject { ParsedHousingCase.new(row1) }
     specify { expect(subject.case_number).to eq "15H85SP000001" }
     specify { expect(subject.case_number_integer).to be 1 }
     specify { expect(subject.title).to eq "15H85SP000001 Jones, Alan Van vs. Smith, Bob et al" }
@@ -52,66 +60,57 @@ describe HousingCSVParser do
   end
 
   describe "a csv row missing information" do
-    subject { HousingCSVParser.new(["15H85SP000001"]) }
+    subject { ParsedHousingCase.new(["15H85SP000001"]) }
 
     it "returns nil whenever a  field is undefined" do
-      methods = [:title, :case_type, :case_status, :status_date, :file_date,
-                 :property_address, :plaintiff_name_original, :plaintiff_attorney_name, 
-                 :defendants_json, :defendants_self_represented, :docket_information,
-                 :case_outcome, :case_outcome_date]
       methods.each { |method_name| expect(subject.send(method_name)).to be_nil }
     end
   end
 
   describe "a csv field is populated with an empty string" do
-    subject { HousingCSVParser.new(["15H85SP000001", "", "", "", "", "", "", "", "", "", "", "", ""]) }
+    subject { ParsedHousingCase.new(["15H85SP000001", "", "", "", "", "", "", "", "", "", "", "", ""]) }
 
     it "returns nil whenever a  field is an empty string" do
-      methods = [:title, :case_type, :case_status, :status_date, :file_date,
-                 :property_address, :plaintiff_name_original, :plaintiff_attorney_name, 
-                 :defendants_json, :defendants_self_represented, :docket_information,
-                 :case_outcome, :case_outcome_date]
       methods.each { |method_name| expect(subject.send(method_name)).to be_nil }
     end
   end
 
   describe '.truncate_name' do
     it "downcases and removes commas, periods, spaces, dashes, and all 's' characters" do
-      expect(HousingCSVParser.truncate_name('one-TWO three,four/fives')).to eq('onetwothreefourfive')
+      expect(ParsedHousingCase.truncate_name('one-TWO three,four/fives')).to eq('onetwothreefourfive')
     end
   end
 
   describe '.fuzzy_name_match' do
+
     it "takes two arguments" do
-      expect{HousingCSVParser.fuzzy_name_match}.to raise_error(ArgumentError)
+      expect{ParsedHousingCase.fuzzy_name_match}.to raise_error(ArgumentError)
     end
 
     describe "when the fingerprint is not in the dictionary" do
       it "returns the name as its first return value" do
-        expect(HousingCSVParser.fuzzy_name_match("some name", {})[0]).to eq("some name")
+        expect(ParsedHousingCase.fuzzy_name_match("some name", {})[0]).to eq("some name")
       end
       it "adds {name: fingerprint} to the dictionary and returns that as the second return value" do
-        expect(HousingCSVParser.fuzzy_name_match("some name", {})[1]).to eq({"omename" => "some name"})
+        expect(ParsedHousingCase.fuzzy_name_match("some name", {})[1]).to eq({"omename" => "some name"})
       end
     end
 
     describe "when the fingerprint is in the dictionary" do
       it "returns the the name that corresponds to the fingerprint as its first return value" do
-        expect(HousingCSVParser.fuzzy_name_match("some name", {'omename' => 'bob'})[0]).to eq('bob')
+        expect(ParsedHousingCase.fuzzy_name_match("some name", {'omename' => 'bob'})[0]).to eq('bob')
       end
       it "returns the same dictionary as the second return value" do
-        expect(HousingCSVParser.fuzzy_name_match("some name", {'omename' => 'bob'})[1]).to eq({'omename' => 'bob'})
+        expect(ParsedHousingCase.fuzzy_name_match("some name", {'omename' => 'bob'})[1]).to eq({'omename' => 'bob'})
       end
     end
 
     describe "when the fingerprint.length > 5  and is a substring of a fingerprint in the dictionary" do
       it "returns the name that corresponds to the substring of the fingerprint in the dictionary" do
-        expect(HousingCSVParser.fuzzy_name_match("some name", {'jubjubomename' => 'bob'})[0]).to eq('bob')
+        expect(ParsedHousingCase.fuzzy_name_match("some name", {'jubjubomename' => 'bob'})[0]).to eq('bob')
       end
-
     end
 
-
-  end
+  end #end describe fuzzy_name_match
 
 end

@@ -18,5 +18,8 @@
 
 -  [ ]  Make a rake task that loads all archived classes
 
+-  [ ]  create defendant name obscurifier so can include the docket information in the publicly downloadable csv
+
+
 
 

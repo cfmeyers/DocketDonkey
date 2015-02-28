@@ -1,4 +1,0 @@
-
-class ArchivedClassLoader
-
-end

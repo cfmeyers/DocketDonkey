@@ -4,9 +4,8 @@ require 'pry'
 
 class CSVHeaderError < StandardError; end
 class CSVNoCaseNumberError < StandardError; end
-class CSVValueDoesNotExistError < StandardError; end
 
-class HousingCSVParser
+class ParsedHousingCase
 
 @@CSV_HEADER = ["case_number", "Title", "CaseType", "CaseStatus", "StatusDate", 
                "FileDate", "PropertyAddress", "PlaintiffName", "PlaintiffAttorneyName", 
@@ -136,6 +135,24 @@ class HousingCSVParser
     end
   end
 
+  def gross_length
+    [self.case_number,
+    self.case_number_integer.to_s,
+    self.title,
+    self.case_type,
+    self.case_status,
+    self.status_date,
+    self.file_date,
+    self.property_address,
+    self.plaintiff_name_original,
+    self.plaintiff_attorney_name,
+    self.defendants_json,
+    self.defendants_self_represented,
+    self.docket_information,
+    self.case_outcome,
+    self.case_outcome_date].join('').length
+  end
+
   def self.truncate_name(name)
     name.downcase.gsub(',', '').gsub(' ', '').gsub('.', '').gsub('-', '').gsub('/', '').gsub('s', '')
   end
@@ -154,3 +171,32 @@ class HousingCSVParser
   end
 
 end
+
+class ArchivedCaseCollection
+  attr_reader :cases
+
+  def initialize(rows)
+    @cases = []
+    rows.shift
+    rows.each do |row|
+      new_kase = ParsedHousingCase.new(row)
+      duplicate = @cases.select { |kase| kase.case_number == new_kase.case_number }
+
+      if duplicate == []
+        @cases << new_kase 
+      elsif new_kase.gross_length > duplicate.first.gross_length
+        @cases.delete(duplicate.first)
+        @cases << new_kase
+      end
+
+    end
+
+  end
+
+end
+
+
+
+
+
+
