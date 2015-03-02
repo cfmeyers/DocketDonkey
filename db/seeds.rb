@@ -13,12 +13,13 @@ Dir['./data/*'].each do |filename|
 end
 
 fuzzy_match_dictionary = {}
-cases.each do |kase|
+cases.each_with_index do |kase, index|
   puts kase if kase.plaintiff_name_original.nil?
   guess, fuzzy_match_dictionary = ParsedHousingCase.fuzzy_name_match(kase.plaintiff_name_original, fuzzy_match_dictionary)
   new_case = Case.new(kase.to_h)
   new_case.plaintiff_name_guess = guess
   new_case.save!
+  puts index if index % 1000 == 0
 end
 
 # puts cases.length
