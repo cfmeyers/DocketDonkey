@@ -57,6 +57,30 @@ describe ParsedHousingCase do
     specify { expect(subject.docket_information).to eq "Docket Information\nDocket File Ref Nbr.\n01/02/2015 Summary Process: MGL Chapter 185C Section 19;..." }
     specify { expect(subject.case_outcome).to eq "Agreement for Judgment" }
     specify { expect(subject.case_outcome_date).to eq Date.parse("15/01/2015") }
+
+    describe "#to_h" do
+      it "returns a hash that can be used as a constructor for a Case object" do
+        expected_hash = {
+          case_number: "15H85SP000001" ,
+          case_number_integer: 1,
+          title: "15H85SP000001 Jones, Alan Van vs. Smith, Bob et al" ,
+          case_type: "Housing Court Summary Process" ,
+          case_status: "Active" ,
+          status_date: Date.parse("2/01/2015"),
+          file_date: Date.parse("2/01/2015"),
+          property_address: "123 Main Street 5L Worcester MA 01610" ,
+          plaintiff_name_original: "Jones, Alan Van" ,
+          plaintiff_attorney_name: "Pro Se (PROPER)" ,
+          defendants_json: [ {name: "Smith, Lori", attorney: "Pro Se (PROPER)"}, {name: "Smith, Bob", attorney: "Pro Se (PROPER)"} ],
+          defendants_self_represented: true,
+          docket_information: "Docket Information\nDocket File Ref Nbr.\n01/02/2015 Summary Process: MGL Chapter 185C Section 19;..." ,
+          case_outcome: "Agreement for Judgment" ,
+          case_outcome_date: Date.parse("15/01/2015")}
+
+        expect(subject.to_h).to eq(expected_hash)
+      end
+    end
+
   end
 
   describe "a csv row missing information" do
@@ -74,6 +98,7 @@ describe ParsedHousingCase do
       methods.each { |method_name| expect(subject.send(method_name)).to be_nil }
     end
   end
+
 
   describe '.truncate_name' do
     it "downcases and removes commas, periods, spaces, dashes, and all 's' characters" do

@@ -91,7 +91,7 @@ class ParsedHousingCase
   end
 
   def defendants_json
-    unless (@row[9].nil? || @row[9].empty?)
+    unless (@row[9].nil? || @row[9].empty? || @row[9] == '{}')
       JSON.parse(@row[9].strip.gsub('|', ',')).map do |item|
         {name: item[0], attorney: item[1]['attorney']}
       end
@@ -101,7 +101,9 @@ class ParsedHousingCase
   end
 
   def defendants_self_represented
-    unless @row[9].nil? || @row[9].empty?
+
+    return nil if self.defendants_json.nil?
+    unless @row[9].nil? || @row[9].empty? || @row[9] == '{}'
       self.defendants_json.each do |defendant|
         return false unless defendant[:attorney] == "Pro Se (PROPER)"
       end
@@ -134,6 +136,45 @@ class ParsedHousingCase
       nil
     end
   end
+  
+  def to_h
+    {
+      case_number: self.case_number,
+      case_number_integer: self.case_number_integer,
+      title: self.title,
+      case_type: self.case_type,
+      case_status: self.case_status,
+      status_date: self.status_date,
+      file_date: self.file_date,
+      property_address: self.property_address,
+      plaintiff_name_original: self.plaintiff_name_original,
+      plaintiff_attorney_name: self.plaintiff_attorney_name,
+      defendants_json: self.defendants_json,
+      defendants_self_represented: self.defendants_self_represented,
+      docket_information: self.docket_information,
+      case_outcome: self.case_outcome,
+      case_outcome_date:self.case_outcome_date 
+    }
+  end
+
+  def to_s
+    
+   [self.case_number || "nil",
+    self.case_number_integer.to_s || "nil",
+    self.title || "nil",
+    self.case_type || "nil",
+    self.case_status || "nil",
+    self.status_date || "nil",
+    self.file_date || "nil",
+    self.property_address || "nil",
+    self.plaintiff_name_original || "nil",
+    self.plaintiff_attorney_name || "nil",
+    self.defendants_json || "nil",
+    self.defendants_self_represented || "nil",
+    self.case_outcome || "nil",
+    self.case_outcome_date
+   ].join('|')
+  end
 
   def gross_length
     [self.case_number,
@@ -151,6 +192,13 @@ class ParsedHousingCase
     self.docket_information,
     self.case_outcome,
     self.case_outcome_date].join('').length
+  end
+
+  def valid?
+
+    self.title || self.case_type || self.case_status || self.status_date || self.file_date || self.property_address || self.plaintiff_name_original ||
+      self.plaintiff_attorney_name || self.defendants_json || self.defendants_self_represented || self.docket_information || self.case_outcome ||
+       self.case_outcome_date
   end
 
   def self.truncate_name(name)
@@ -182,8 +230,8 @@ class ArchivedCaseCollection
       new_kase = ParsedHousingCase.new(row)
       duplicate = @cases.select { |kase| kase.case_number == new_kase.case_number }
 
-      if duplicate == []
-        @cases << new_kase 
+      if duplicate == [] 
+        @cases << new_kase if new_kase.valid?
       elsif new_kase.gross_length > duplicate.first.gross_length
         @cases.delete(duplicate.first)
         @cases << new_kase
