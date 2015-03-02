@@ -5,7 +5,7 @@ set :repo_url, 'git@github.com:cfmeyers/DocketDonkey.git'
 set :deploy_to, '/home/collin/DocketDonkey'
 set :linked_files, %w{config/database.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
-
+set :linked_dirs, fetch(:linked_dirs) + %w{data}
 namespace :deploy do
 
   desc 'Restart application'
