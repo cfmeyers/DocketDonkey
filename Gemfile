@@ -17,6 +17,8 @@ gem 'capistrano-bundler'
 gem 'capistrano-rails'
 gem 'capistrano-rbenv', github: "capistrano/rbenv" # Add this if you're using rbenv
 
+gem 'devise'
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
