@@ -1,7 +1,9 @@
 class Users::SessionsController < Devise::SessionsController
-  def create
-    super
-  end
+
+  # def create
+  #   super
+  # end
+
 # before_filter :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
