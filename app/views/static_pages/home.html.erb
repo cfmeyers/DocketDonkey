@@ -1,16 +1,29 @@
+<nav>
+<ul>
+
+  <% if user_signed_in? %>
+    <li>
+      <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>        
+    </li>
+  <% else %>
+    <li>
+      <%= link_to('Login', new_user_session_path)  %>  
+    </li>
+
+    <li>
+      <%= link_to('Sign Up', new_user_registration_path)  %>  
+    </li>
+
+  <% end %>
+
+
+</ul>
+</nav>
+
+
+
 <h1>Docket Donkey</h1>
 <p>A hub for downloading Massachusetts Trial Court information as CSV files</p>
-
-<%# <%= form_for(@cases) do |f| %1> %>
-<%#   <%= f.label :start %1> %>
-<%#   <%= f.date_field :start %1> %>
-
-<%#   <%= f.label :complete %1> %>
-<%#   <%= f.date_field :complete %1> %>
-
-<%#   <%= f.submit "Get Data" %1> %>
-
-<%# <% end %1> %>
 
 <form action="/cases" method="POST">
   <input name="authenticity_token" value="<%= form_authenticity_token() %>" type="hidden">
