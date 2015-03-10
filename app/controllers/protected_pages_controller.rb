@@ -3,4 +3,5 @@ class ProtectedPagesController < ApplicationController
 
   def download_csv
   end
+
 end

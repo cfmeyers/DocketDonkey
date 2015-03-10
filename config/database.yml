@@ -9,7 +9,7 @@ development:
 
 test:
   <<: *default
-  database: docket_donkey
+  database: docket_donkey_test
 
 production:
   <<: *default
