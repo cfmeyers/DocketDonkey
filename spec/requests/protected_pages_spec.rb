@@ -25,7 +25,7 @@ RSpec.describe "ProtectedPages" do
 
     it "has a title that indicates full access" do
       visit '/protected_pages/download_csv'
-      expect(page).to have_content("Full Access Housing CSV Data")
+      expect(page).to have_content("Docket Donkey")
     end
 
 

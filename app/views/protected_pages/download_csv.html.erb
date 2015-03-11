@@ -1,17 +1,15 @@
-<h1>Full Access Housing CSV Data</h1>
 
-<form action="/cases" method="POST">
+<form action="/cases" method="POST" class='csv-form'>
   <input name="authenticity_token" value="<%= form_authenticity_token() %>" type="hidden">
   
-  <label>
-    From: <input type="date" name="start" />
-  </label>
+  <ul>
+    <li><h2>Dates</h2></li>
+    <li><label>From:</label><input type="date" name="start" /> </li>
 
-  <label>
-    To: <input type="date" name="complete" />
-  </label>
+    <li><label>To:</label> <input type="date" name="complete" /> </li>
 
-  <button>Submit</button>
+  <li><button>Download CSV file</button></li>
+  </ul>
 </form>
 
 
