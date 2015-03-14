@@ -4,6 +4,8 @@
 
 ##Todo
 
+-  [ ]  Add link root to title 
+
 -  [X]  Move csv parsing code from seeds.rb to library 
 
 -  [X]  Write tests for csv parsing code
