@@ -9,6 +9,10 @@ body{
     overflow:hidden;
     border-top: 10px solid rgb(140,16,12);
 }
+h1 a{
+  text-decoration: none;
+  color: rgba(0,0,0,.85);
+}
 h1 {
     font-weight: bold;
     font-size: 70px;
