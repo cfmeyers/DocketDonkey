@@ -16,11 +16,15 @@ class CasesController < ApplicationController
                        'defendants_self_represented', 'case_outcome', 'case_outcome_date']
     end
 
-    if params[:format] == 'csv'
-      send_data @cases.to_csv(public_fields), :filename => 'cases.csv'
-    elsif params[:format] == 'xls'
-      send_data @cases.to_csv(public_fields), :filename => 'cases.csv'
+    respond_to do |format|
+      format.csv { send_data @cases.to_csv(public_fields), :filename => 'cases.csv' }
     end
+
+    # if params[:format] == 'csv'
+    #   send_data @cases.to_csv(public_fields), :filename => 'cases.csv'
+    # elsif params[:format] == 'xls'
+    #   send_data @cases.to_csv(public_fields), :filename => 'cases.csv'
+    # end
 
   end
 
