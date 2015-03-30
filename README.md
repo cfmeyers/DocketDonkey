@@ -36,7 +36,7 @@ Currently DocketDonkey's Postgresql database is loaded with data in batches.  Th
 
 In making `ParsedHousingCase`, I chose to make it a plain Ruby class and not to inherit from `ActiveRecord::Base`.  This allowed me to test it without having Rspec load the entire Rails testing environment (which takes about 4 seconds on my laptop)
 
-Testing just the classes in the lib directory takes me less than a second, greatly speeding up the development process:
+Testing just the classes in the lib directory (by not including `require 'rails_helper'` at the top of the specs) takes me less than a second, greatly speeding up the development process:
 
 ![Rspec on just lib classes](https://raw.githubusercontent.com/cfmeyers/DocketDonkey/master/app/assets/images/rspec-screenshot-just-lib.png)
 
@@ -66,7 +66,7 @@ Used the [Devise](https://github.com/plataformatec/devise) gem for authenticatio
 
 Deployed on a [DigitalOcean](https://www.digitalocean.com/) VPS using [Nginx](http://nginx.org/), [Passenger](https://github.com/phusion/passenger), [Postgresql](http://www.postgresql.org/), and [Capistrano](https://github.com/capistrano/capistrano).
 
-
+Currently I upload the scraped data too the server using `scp`, then `ssh` to the server and run `rake db:seed` to load the case data  into the Postgresql database.
 
 ##Todo
 
