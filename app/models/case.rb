@@ -1,4 +1,5 @@
 class Case < ActiveRecord::Base
+  require 'rubyXL'
 
 # case_number
 # case_number_integer
@@ -32,4 +33,23 @@ class Case < ActiveRecord::Base
     end
 
   end
+
+  def self.to_xls(public_fields)
+
+    workbook = RubyXL::Workbook.new
+    sheet = workbook.worksheets[0]
+
+    public_fields.each_with_index { |field, column| sheet.add_cell(0, column, field) }
+
+    all.each.with_index(1) do |kase, row|
+
+      public_fields.each_with_index do |field, column|
+        sheet.add_cell(row, column, kase[field])
+      end
+
+    end
+
+    workbook.stream.string
+  end
+
 end
