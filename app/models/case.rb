@@ -1,23 +1,6 @@
 class Case < ActiveRecord::Base
   require 'rubyXL'
 
-# case_number
-# case_number_integer
-# title
-# case_type
-# case_status
-# status_date
-# file_date
-# property_address
-# plaintiff_name_original
-# plaintiff_name_guess
-# plaintiff_attorney_name
-# defendants_json
-# defendants_self_represented
-# docket_information
-# case_outcome
-# case_outcome_date
-
   def self.to_csv(public_fields)
     
     CSV.generate do |csv|

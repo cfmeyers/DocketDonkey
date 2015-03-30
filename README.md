@@ -32,7 +32,25 @@ The code hasn't yet been published on github.  I'm looking at porting it over to
 
 ###Parsing
 
+Currently DocketDonkey's Postgresql database is loaded with data in batches.  The Python scraper generates CSV files which DocketDonkey parses using its [`ParsedHousingCase`](https://github.com/cfmeyers/DocketDonkey/blob/master/lib/parsed_housing_case.rb) class.  This class was built with TDD using [Rspec](https://github.com/rspec/rspec).
+
+In making `ParsedHousingCase`, I chose to make it a plain Ruby class and not to inherit from `ActiveRecord::Base`.  This allowed me to test it without having Rspec load the entire Rails testing environment (which takes about 4 seconds on my laptop)
+
+Testing just the classes in the lib directory takes me less than a second, greatly speeding up the development process:
+
+![Rspec on just lib classes](https://raw.githubusercontent.com/cfmeyers/DocketDonkey/master/app/assets/images/rspec-screenshot-just-lib.png)
+
+The [`seeds.rb`](https://github.com/cfmeyers/DocketDonkey/blob/master/db/seeds.rb) file calls the `ParsedHousingCase` on all the csv files in the data directory.  
+
+At a later date I plan to have a dynamic scraper/loader that runs once a night.  
+
 ###Site
+
+The site is a traditional Rails app with two pages: one for logged-in users and one for anonymous users.
+
+The site itself is simple, with a few [Capybara](https://github.com/jnicklas/capybara) request specs to verify that only logged-in users can get to form that delivers full-access data.
+
+-  Export to CSV: modeled on [this RailsCast](http://railscasts.com/episodes/362-exporting-csv-and-excel) by Ryan Bates, relevant code in [`Case.rb`](https://github.com/cfmeyers/DocketDonkey/blob/master/app/models/case.rb).
 
 -  Export to Excel:  For a detailed rundown of the headaches from adding this feature, see [this](http://blog.cfmeyers.com/2015/03/29/adding-export-to-excel-to-docketdonkey.html) blog post.
 
