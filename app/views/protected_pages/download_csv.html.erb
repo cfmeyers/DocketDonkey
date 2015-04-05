@@ -1,4 +1,3 @@
-
 <form action="/cases" method="POST" class='csv-form'>
   <input name="authenticity_token" value="<%= form_authenticity_token() %>" type="hidden">
   
@@ -8,7 +7,10 @@
 
     <li><label>To:</label> <input type="date" name="complete" value="<%=Date.today%>"/> </li>
 
-  <li><button>Download CSV file</button></li>
+    <li><label>CSV</label> <input type="radio" name="format" value="csv" /> </li>
+    <li><label>Excel</label> <input type="radio" name="format" value="xlsx" checked /> </li>
+
+  <li><button>Download File</button></li>
   </ul>
 </form>
 

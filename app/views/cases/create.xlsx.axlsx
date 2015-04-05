@@ -1,0 +1,10 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: 'Cases') do |sheet|
+    sheet.add_row @public_fields
+
+    @cases.each do |kase|
+      sheet.add_row( @public_fields.map { |field| kase[field] } )
+    end
+
+end

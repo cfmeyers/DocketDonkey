@@ -11,7 +11,11 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'pry-rails'
-gem 'rubyXL'
+
+gem 'zip-zip' #for axlsx
+gem 'rubyzip', '~> 1.0.0'
+gem 'axlsx'
+gem "axlsx_rails"
 
 gem 'capistrano'
 gem 'capistrano-bundler'
