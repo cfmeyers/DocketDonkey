@@ -19,7 +19,6 @@ class CasesController < ApplicationController
 
     respond_to do |format|
       format.csv { send_data @cases.to_csv(public_fields), :filename => 'cases.csv' }
-      # format.xls { send_data @cases.to_xls(public_fields), filename: 'cases.xls' }
       format.xlsx { render :xlsx => "create", :filename => "cases.xlsx" }
     end
 
