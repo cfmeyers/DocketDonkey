@@ -1,5 +1,5 @@
-# lock '3.3.5'
-lock '3.4.0'
+lock '3.3.5'
+# lock '3.4.0'
 
 set :application, 'DocketDonkey' #application name (what you called your rails app when you ran rails new ...)
 set :repo_url, 'git@github.com:cfmeyers/DocketDonkey.git'

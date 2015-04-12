@@ -17,7 +17,7 @@ gem 'rubyzip', '~> 1.0.0'
 gem 'axlsx'
 gem "axlsx_rails"
 
-gem 'capistrano'
+gem 'capistrano', '~> 3.3.5'
 gem 'capistrano-bundler'
 gem 'capistrano-rails'
 gem 'capistrano-rbenv', github: "capistrano/rbenv" # Add this if you're using rbenv
