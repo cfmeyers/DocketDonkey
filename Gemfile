@@ -30,6 +30,9 @@ group :development, :test do
   gem 'spring', '~>1.3.3'
   gem 'rspec-rails'
   gem 'mailcatcher'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'awesome_print'
 end
 
 group :test do
